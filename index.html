@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>아마타 (Amatha) — 아 맞다, 그거 만기였지!</title>
+  <meta name="description" content="전세, 대출, 핸드폰, 보험, 적금 등 모든 만기를 카카오톡으로 미리 알려드립니다." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── Reset & Base ─── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+
+    :root {
+      --teal: #1D9E75;
+      --teal-dark: #157a5a;
+      --teal-light: #e8f7f2;
+      --teal-mid: #c0eadb;
+      --bg: #ffffff;
+      --bg2: #f8fafb;
+      --bg3: #f0f4f3;
+      --text: #1a1a2e;
+      --text2: #4a5568;
+      --text3: #718096;
+      --border: #e2e8f0;
+      --card-bg: #ffffff;
+      --card-shadow: 0 2px 16px rgba(0,0,0,0.07);
+      --header-bg: rgba(255,255,255,0.95);
+      --radius: 16px;
+      --radius-sm: 10px;
+    }
+
+    [data-theme="dark"] {
+      --bg: #0f1117;
+      --bg2: #161b22;
+      --bg3: #1c2333;
+      --text: #e6edf3;
+      --text2: #8b949e;
+      --text3: #6e7681;
+      --border: #30363d;
+      --card-bg: #161b22;
+      --card-shadow: 0 2px 16px rgba(0,0,0,0.4);
+      --header-bg: rgba(15,17,23,0.95);
+      --teal-light: #0d2e22;
+      --teal-mid: #0f3d2a;
+    }
+
+    body {
+      font-family: 'Noto Sans KR', 'Poppins', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      transition: background 0.3s, color 0.3s;
+      overflow-x: hidden;
+    }
+
+    .lang-en body, [lang="en"] body {
+      font-family: 'Poppins', 'Noto Sans KR', sans-serif;
+    }
+
+    /* ─── Typography ─── */
+    h1 { font-size: clamp(2rem, 5vw, 3rem); font-weight: 900; line-height: 1.15; }
+    h2 { font-size: clamp(1.5rem, 3.5vw, 2.2rem); font-weight: 700; line-height: 1.25; }
+    h3 { font-size: 1.15rem; font-weight: 700; }
+    p  { line-height: 1.75; color: var(--text2); }
+
+    /* ─── Layout ─── */
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+    section { padding: 80px 0; }
+
+    /* ─── Header ─── */
+    #header {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--header-bg);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      transition: background 0.3s, border-color 0.3s;
+    }
+    .header-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      height: 64px;
+    }
+    .logo {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 1.3rem; font-weight: 900;
+      color: var(--teal); text-decoration: none;
+      letter-spacing: -0.5px;
+    }
+    .logo-bell { font-size: 1.4rem; }
+    .logo-sub { font-size: 0.7rem; font-weight: 500; color: var(--text3); letter-spacing: 1px; text-transform: uppercase; display: block; line-height: 1; margin-top: 2px; }
+
+    .header-controls { display: flex; align-items: center; gap: 8px; }
+
+    .toggle-btn {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      color: var(--text2);
+      border-radius: 24px;
+      padding: 6px 14px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .toggle-btn:hover { background: var(--teal); color: #fff; border-color: var(--teal); }
+    .toggle-btn.active { background: var(--teal); color: #fff; border-color: var(--teal); }
+
+    /* ─── Hero ─── */
+    #hero {
+      padding: 100px 0 80px;
+      background: linear-gradient(160deg, var(--bg) 0%, var(--teal-light) 100%);
+      position: relative; overflow: hidden;
+    }
+    #hero::before {
+      content: '';
+      position: absolute; top: -80px; right: -80px;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, var(--teal-mid) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--teal-light);
+      border: 1px solid var(--teal-mid);
+      color: var(--teal);
+      border-radius: 24px;
+      padding: 6px 16px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      margin-bottom: 24px;
+    }
+    .hero-title {
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+    .hero-title span { color: var(--teal); }
+    .hero-subtitle {
+      font-size: 1.2rem;
+      color: var(--text2);
+      max-width: 560px;
+      margin-bottom: 40px;
+      line-height: 1.7;
+    }
+
+    /* Founder story card */
+    .founder-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--teal);
+      border-radius: var(--radius-sm);
+      padding: 24px 28px;
+      margin-bottom: 40px;
+      max-width: 620px;
+      box-shadow: var(--card-shadow);
+    }
+    .founder-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--teal);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+    }
+    .founder-quote {
+      font-size: 1rem;
+      color: var(--text2);
+      line-height: 1.8;
+      font-style: italic;
+    }
+    .founder-name {
+      margin-top: 12px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .cta-group { display: flex; gap: 12px; flex-wrap: wrap; }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--teal);
+      color: #fff;
+      border: none; border-radius: 12px;
+      padding: 16px 32px;
+      font-size: 1rem; font-weight: 700;
+      cursor: pointer; text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .btn-primary:hover { background: var(--teal-dark); transform: translateY(-1px); }
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: transparent;
+      color: var(--teal);
+      border: 2px solid var(--teal); border-radius: 12px;
+      padding: 14px 28px;
+      font-size: 1rem; font-weight: 700;
+      cursor: pointer; text-decoration: none;
+      transition: all 0.2s;
+    }
+    .btn-secondary:hover { background: var(--teal); color: #fff; }
+
+    /* ─── Section Labels ─── */
+    .section-label {
+      display: inline-block;
+      background: var(--teal-light);
+      color: var(--teal);
+      border-radius: 24px;
+      padding: 5px 14px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+    }
+    .section-title { margin-bottom: 12px; }
+    .section-desc { color: var(--text2); font-size: 1.05rem; max-width: 560px; }
+    .section-head { margin-bottom: 52px; }
+
+    /* ─── Problem Cards ─── */
+    #problem { background: var(--bg2); }
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px 28px;
+      box-shadow: var(--card-shadow);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .card:hover { transform: translateY(-4px); box-shadow: 0 8px 32px rgba(0,0,0,0.12); }
+    .card-icon {
+      width: 52px; height: 52px;
+      background: var(--teal-light);
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem;
+      margin-bottom: 20px;
+    }
+    .card h3 { margin-bottom: 10px; }
+
+    /* ─── Solution ─── */
+    #solution {
+      background: linear-gradient(135deg, var(--teal) 0%, var(--teal-dark) 100%);
+      color: #fff;
+    }
+    #solution .section-label { background: rgba(255,255,255,0.2); color: #fff; }
+    #solution .section-title { color: #fff; }
+    #solution .section-desc { color: rgba(255,255,255,0.85); max-width: 700px; }
+    .solution-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 24px;
+      margin-top: 48px;
+    }
+    .solution-item {
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      backdrop-filter: blur(4px);
+    }
+    .solution-item h3 { color: #fff; margin-bottom: 8px; }
+    .solution-item p { color: rgba(255,255,255,0.8); }
+    .solution-num {
+      font-size: 2rem; font-weight: 900;
+      color: rgba(255,255,255,0.3);
+      margin-bottom: 12px;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    /* ─── Features ─── */
+    #features { background: var(--bg); }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 28px;
+    }
+    .feature-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 36px 28px;
+      box-shadow: var(--card-shadow);
+      position: relative; overflow: hidden;
+    }
+    .feature-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 4px;
+      background: var(--teal);
+    }
+    .feature-icon { font-size: 2.2rem; margin-bottom: 20px; }
+    .feature-card h3 { margin-bottom: 12px; font-size: 1.2rem; }
+
+    /* ─── Chain ─── */
+    #chain { background: var(--bg2); }
+    .chain-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+    .chain-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--card-shadow);
+    }
+    .chain-card h3 { margin-bottom: 16px; font-size: 1rem; color: var(--text); }
+    .chain-flow {
+      display: flex; flex-direction: column; gap: 0;
+    }
+    .chain-step {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 10px 0;
+      position: relative;
+    }
+    .chain-step:not(:last-child)::after {
+      content: '';
+      position: absolute; left: 15px; bottom: -8px;
+      width: 2px; height: 16px;
+      background: var(--teal-mid);
+    }
+    .chain-dot {
+      width: 30px; height: 30px; min-width: 30px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 700;
+    }
+    .chain-dot.primary { background: var(--teal); color: #fff; }
+    .chain-dot.secondary { background: var(--teal-light); color: var(--teal); border: 2px solid var(--teal-mid); }
+    .chain-dot.warning { background: #fff3cd; color: #856404; border: 2px solid #ffc107; }
+    .chain-text { font-size: 0.9rem; color: var(--text2); padding-top: 4px; line-height: 1.5; }
+    .chain-text strong { color: var(--text); font-weight: 700; }
+
+    /* ─── Items Badges ─── */
+    #items { background: var(--bg); }
+    .badges-wrap {
+      display: flex; flex-wrap: wrap; gap: 16px;
+      justify-content: center;
+    }
+    .badge-item {
+      background: var(--card-bg);
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      padding: 20px 28px;
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+      min-width: 130px;
+      box-shadow: var(--card-shadow);
+      transition: all 0.2s;
+    }
+    .badge-item:hover { border-color: var(--teal); background: var(--teal-light); }
+    .badge-item:hover .badge-icon { background: var(--teal); }
+    .badge-icon {
+      width: 48px; height: 48px;
+      background: var(--teal-light);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem;
+      transition: background 0.2s;
+    }
+    .badge-label { font-size: 0.88rem; font-weight: 700; color: var(--text); text-align: center; }
+
+    /* ─── Pricing ─── */
+    #pricing { background: var(--bg2); }
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      align-items: start;
+    }
+    .price-card {
+      background: var(--card-bg);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 36px 32px;
+      box-shadow: var(--card-shadow);
+      transition: transform 0.2s;
+    }
+    .price-card:hover { transform: translateY(-4px); }
+    .price-card.popular {
+      border-color: var(--teal);
+      position: relative;
+    }
+    .popular-badge {
+      position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+      background: var(--teal); color: #fff;
+      border-radius: 24px; padding: 4px 16px;
+      font-size: 0.78rem; font-weight: 700; white-space: nowrap;
+    }
+    .price-tier { font-size: 0.82rem; font-weight: 700; color: var(--teal); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+    .price-name { font-size: 1.4rem; font-weight: 900; margin-bottom: 4px; }
+    .price-amount {
+      font-size: 2.5rem; font-weight: 900;
+      color: var(--teal); margin: 16px 0 4px;
+      font-family: 'Poppins', sans-serif;
+    }
+    .price-amount span { font-size: 1rem; color: var(--text3); font-weight: 500; }
+    .price-desc { font-size: 0.9rem; color: var(--text3); margin-bottom: 24px; }
+    .price-features { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .price-features li {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: 0.9rem; color: var(--text2);
+    }
+    .price-features li::before { content: '✓'; color: var(--teal); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+    .price-cta {
+      display: block;
+      text-align: center;
+      background: var(--teal);
+      color: #fff;
+      border: none; border-radius: 10px;
+      padding: 14px;
+      font-size: 0.95rem; font-weight: 700;
+      cursor: pointer; text-decoration: none;
+      margin-top: 28px;
+      transition: background 0.2s;
+    }
+    .price-cta:hover { background: var(--teal-dark); }
+    .price-cta.outline {
+      background: transparent; color: var(--teal); border: 2px solid var(--teal);
+    }
+    .price-cta.outline:hover { background: var(--teal); color: #fff; }
+
+    /* ─── Beta Form ─── */
+    #beta { background: var(--bg); }
+    .form-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 48px 40px;
+      max-width: 640px;
+      margin: 0 auto;
+      box-shadow: var(--card-shadow);
+    }
+    .form-group { margin-bottom: 20px; }
+    .form-group label {
+      display: block;
+      font-size: 0.88rem; font-weight: 700;
+      margin-bottom: 8px; color: var(--text);
+    }
+    .form-group input, .form-group select {
+      width: 100%;
+      background: var(--bg2);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: 1rem; color: var(--text);
+      font-family: inherit;
+      transition: border-color 0.2s;
+      outline: none;
+    }
+    .form-group input:focus, .form-group select:focus { border-color: var(--teal); }
+    .form-group select { cursor: pointer; }
+
+    .interest-grid {
+      display: flex; flex-wrap: wrap; gap: 10px;
+    }
+    .interest-label {
+      display: flex; align-items: center; gap: 6px;
+      background: var(--bg2);
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-size: 0.85rem; font-weight: 600;
+      cursor: pointer; transition: all 0.15s;
+    }
+    .interest-label input[type="checkbox"] { display: none; }
+    .interest-label:hover { border-color: var(--teal); color: var(--teal); }
+    .interest-label.checked { background: var(--teal-light); border-color: var(--teal); color: var(--teal); }
+
+    .form-submit {
+      width: 100%;
+      background: var(--teal); color: #fff;
+      border: none; border-radius: 10px;
+      padding: 16px;
+      font-size: 1.05rem; font-weight: 700;
+      cursor: pointer; margin-top: 8px;
+      font-family: inherit;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .form-submit:hover { background: var(--teal-dark); transform: translateY(-1px); }
+    .form-note { font-size: 0.8rem; color: var(--text3); text-align: center; margin-top: 16px; }
+    .form-success {
+      display: none; text-align: center; padding: 32px;
+      color: var(--teal); font-size: 1.1rem; font-weight: 700;
+    }
+
+    /* ─── Footer ─── */
+    footer {
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+      padding: 40px 0;
+      text-align: center;
+    }
+    .footer-logo {
+      font-size: 1.2rem; font-weight: 900; color: var(--teal);
+      margin-bottom: 8px;
+    }
+    .footer-tagline { font-size: 0.88rem; color: var(--text3); margin-bottom: 16px; }
+    .footer-copy { font-size: 0.8rem; color: var(--text3); }
+
+    /* ─── Animations ─── */
+    .fade-in { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+    .fade-in-delay-1 { transition-delay: 0.1s; }
+    .fade-in-delay-2 { transition-delay: 0.2s; }
+    .fade-in-delay-3 { transition-delay: 0.3s; }
+
+    /* ─── Language ─── */
+    [data-ko], [data-en] { display: none; }
+    html[data-lang="ko"] [data-ko] { display: unset; }
+    html[data-lang="en"] [data-en] { display: unset; }
+    html[data-lang="ko"] span[data-ko], html[data-lang="en"] span[data-en] { display: inline; }
+    html[data-lang="ko"] li[data-ko], html[data-lang="en"] li[data-en] { display: flex; }
+    html[data-lang="ko"] p[data-ko], html[data-lang="en"] p[data-en] { display: block; }
+    html[data-lang="ko"] div[data-ko], html[data-lang="en"] div[data-en] { display: block; }
+    html[data-lang="ko"] h1[data-ko], html[data-lang="en"] h1[data-en] { display: block; }
+    html[data-lang="ko"] h2[data-ko], html[data-lang="en"] h2[data-en] { display: block; }
+    html[data-lang="ko"] h3[data-ko], html[data-lang="en"] h3[data-en] { display: block; }
+
+    /* ─── Mobile ─── */
+    @media (max-width: 680px) {
+      section { padding: 60px 0; }
+      #hero { padding: 72px 0 60px; }
+      .form-card { padding: 32px 24px; }
+      .price-card { padding: 28px 24px; }
+      .cta-group { flex-direction: column; }
+      .cta-group a, .cta-group button { width: 100%; text-align: center; justify-content: center; }
+      .header-controls { gap: 6px; }
+      .toggle-btn { padding: 5px 10px; font-size: 0.75rem; }
+    }
+    @media (max-width: 480px) {
+      .badge-item { min-width: calc(50% - 8px); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── HEADER ─── -->
+<header id="header">
+  <div class="container">
+    <div class="header-inner">
+      <a href="#" class="logo">
+        <span class="logo-bell">🔔</span>
+        <div>
+          <span>아마타</span>
+          <span class="logo-sub" data-ko>만기 알림 서비스</span>
+          <span class="logo-sub" data-en>Expiry Reminder</span>
+        </div>
+      </a>
+      <div class="header-controls">
+        <button class="toggle-btn" id="langToggle" onclick="toggleLang()" title="언어 전환">
+          <span data-ko>🇺🇸 EN</span>
+          <span data-en>🇰🇷 KO</span>
+        </button>
+        <button class="toggle-btn" id="darkToggle" onclick="toggleDark()" title="다크모드">
+          <span id="darkIcon">🌙</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ─── HERO ─── -->
+<section id="hero">
+  <div class="container">
+    <div class="hero-badge">
+      <span>🚀</span>
+      <span data-ko>베타 출시 준비 중</span>
+      <span data-en>Beta Coming Soon</span>
+    </div>
+
+    <h1 class="hero-title fade-in">
+      <span data-ko>아 맞다,<br/><span style="color:var(--teal)">그거 만기였지!</span></span>
+      <span data-en>The Moment<br/><span style="color:var(--teal)">You Almost Forgot</span></span>
+    </h1>
+
+    <p class="hero-subtitle fade-in fade-in-delay-1" data-ko>
+      전세, 대출, 핸드폰, 보험, 적금 등 모든 만기를<br/>
+      카카오톡으로 <strong style="color:var(--text)">미리 알려</strong>드립니다.<br/>
+      연결된 만기까지 함께 챙겨드려요.
+    </p>
+    <p class="hero-subtitle fade-in fade-in-delay-1" data-en>
+      Get ahead of every expiry — lease, loans, phone contracts,<br/>
+      insurance, savings — <strong style="color:var(--text)">via KakaoTalk</strong>.<br/>
+      We even remind you about linked deadlines you might miss.
+    </p>
+
+    <!-- Founder Story -->
+    <div class="founder-card fade-in fade-in-delay-2">
+      <div class="founder-label" data-ko>창업자 실화 스토리</div>
+      <div class="founder-label" data-en>Founder's True Story</div>
+      <p class="founder-quote" data-ko>
+        "전세 만기인 건 알고 있었습니다. 근데 연동된 전세대출 연장을 빠뜨렸어요. 자칫하면 신용불량자가 될 뻔했습니다. 그때 아마타가 있었다면..."
+      </p>
+      <p class="founder-quote" data-en>
+        "I knew my lease was expiring. But I forgot to renew the linked housing loan. I nearly ended up with a bad credit rating. If only Amatha had existed back then..."
+      </p>
+      <div class="founder-name">— 아마타 창업자 <span data-en>/ Amatha Founder</span></div>
+    </div>
+
+    <div class="cta-group fade-in fade-in-delay-3">
+      <a href="#beta" class="btn-primary">
+        <span>✉️</span>
+        <span data-ko>베타 신청하기</span>
+        <span data-en>Join the Beta</span>
+      </a>
+      <a href="#features" class="btn-secondary">
+        <span data-ko>기능 보기 →</span>
+        <span data-en>See Features →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PROBLEM ─── -->
+<section id="problem">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-label" data-ko>문제</div>
+      <div class="section-label" data-en>The Problem</div>
+      <h2 class="section-title" data-ko>왜 만기를 놓치게 될까요?</h2>
+      <h2 class="section-title" data-en>Why Do We Keep Missing Deadlines?</h2>
+      <p class="section-desc" data-ko>만기 정보는 곳곳에 흩어져 있고, 이메일 알림은 무시되고, 놓친 순간 손해는 막대합니다.</p>
+      <p class="section-desc" data-en>Expiry info is scattered everywhere, email alerts get ignored, and the cost of missing one can be enormous.</p>
+    </div>
+    <div class="cards-grid">
+      <div class="card fade-in">
+        <div class="card-icon">📂</div>
+        <h3 data-ko>흩어진 약정들</h3>
+        <h3 data-en>Everything Is Scattered</h3>
+        <p data-ko>핸드폰은 통신사 앱, 보험은 보험사 앱, 전세는 서류 더미 속에. 한 곳에 모아볼 방법이 없습니다.</p>
+        <p data-en>Phone contract in the carrier app, insurance in another, lease in a pile of documents. Nothing is in one place.</p>
+      </div>
+      <div class="card fade-in fade-in-delay-1">
+        <div class="card-icon">🗑️</div>
+        <h3 data-ko>무시되는 이메일</h3>
+        <h3 data-en>Emails Get Ignored</h3>
+        <p data-ko>만기 안내 이메일은 스팸함으로 직행하거나, 읽어도 나중에 하려다 잊어버립니다. 알림이 와도 행동으로 이어지지 않습니다.</p>
+        <p data-en>Expiry emails go straight to spam, or you read them and think "I'll deal with it later" — and then forget. Notifications don't lead to action.</p>
+      </div>
+      <div class="card fade-in fade-in-delay-2">
+        <div class="card-icon">💸</div>
+        <h3 data-ko>갑작스런 손해</h3>
+        <h3 data-en>Sudden Financial Loss</h3>
+        <p data-ko>자동 갱신 수수료, 위약금, 고금리 연장, 신용불량 위험. 만기 하나를 놓치는 건 생각보다 훨씬 큰 타격입니다.</p>
+        <p data-en>Auto-renewal fees, penalties, high-rate extensions, credit risk. Missing one expiry hits much harder than you'd expect.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── SOLUTION ─── -->
+<section id="solution">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-label" data-ko>솔루션</div>
+      <div class="section-label" data-en>The Solution</div>
+      <h2 class="section-title" data-ko>아마타가 대신 챙겨드립니다</h2>
+      <h2 class="section-title" data-en>Amatha Has You Covered</h2>
+      <p class="section-desc" data-ko>카카오톡으로 만기를 미리 알려드리고, 연결된 만기까지 함께 챙겨드리는 스마트 만기 관리 서비스입니다.</p>
+      <p class="section-desc" data-en>Smart expiry management via KakaoTalk — reminding you of upcoming deadlines and the linked ones you'd never think of.</p>
+    </div>
+    <div class="solution-grid">
+      <div class="solution-item fade-in">
+        <div class="solution-num">01</div>
+        <h3 data-ko>한 곳에 모아서</h3>
+        <h3 data-en>Everything in One Place</h3>
+        <p data-ko>모든 만기를 한 앱에 등록하고 한눈에 관리하세요.</p>
+        <p data-en>Register all your expiries in one app and track them at a glance.</p>
+      </div>
+      <div class="solution-item fade-in fade-in-delay-1">
+        <div class="solution-num">02</div>
+        <h3 data-ko>카카오톡으로 알림</h3>
+        <h3 data-en>KakaoTalk Alerts</h3>
+        <p data-ko>D-30, D-7, D-1 — 놓칠 수 없는 카카오톡으로 미리 받아보세요.</p>
+        <p data-en>D-30, D-7, D-1 — get reminders via KakaoTalk, the app you actually open.</p>
+      </div>
+      <div class="solution-item fade-in fade-in-delay-2">
+        <div class="solution-num">03</div>
+        <h3 data-ko>만기 체인 알림</h3>
+        <h3 data-en>Expiry Chain Alerts</h3>
+        <p data-ko>전세 만기 → 전세대출 연장처럼, 연결된 만기까지 함께 알려드립니다.</p>
+        <p data-en>Lease expires → loan renewal needed. We flag the linked deadlines too.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FEATURES ─── -->
+<section id="features">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-label" data-ko>핵심 기능</div>
+      <div class="section-label" data-en>Core Features</div>
+      <h2 class="section-title" data-ko>3가지 핵심 기능</h2>
+      <h2 class="section-title" data-en>3 Key Features</h2>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card fade-in">
+        <div class="feature-icon">📷</div>
+        <h3 data-ko>OCR 자동 등록</h3>
+        <h3 data-en>OCR Auto-Registration</h3>
+        <p data-ko>계약서 사진을 찍으면 만기일을 자동으로 인식해 등록합니다. 직접 입력할 필요 없이 빠르게 완료.</p>
+        <p data-en>Snap a photo of your contract and the expiry date is automatically extracted and registered. No manual entry needed.</p>
+      </div>
+      <div class="feature-card fade-in fade-in-delay-1">
+        <div class="feature-icon">📅</div>
+        <h3 data-ko>만기 캘린더</h3>
+        <h3 data-en>Expiry Calendar</h3>
+        <p data-ko>모든 만기를 한눈에 볼 수 있는 전용 캘린더. 다가오는 만기를 한눈에 확인하고 미리 준비하세요.</p>
+        <p data-en>A dedicated calendar showing all your upcoming expiries. See what's coming at a glance and prepare in advance.</p>
+      </div>
+      <div class="feature-card fade-in fade-in-delay-2">
+        <div class="feature-icon">💬</div>
+        <h3 data-ko>카카오톡 알림 (D-30·7·1)</h3>
+        <h3 data-en>KakaoTalk Alerts (D-30·7·1)</h3>
+        <p data-ko>만기 30일 전, 7일 전, 하루 전. 카카오톡으로 3번 알려드립니다. 이제 놓칠 일이 없습니다.</p>
+        <p data-en>30 days, 7 days, and 1 day before expiry — three KakaoTalk reminders so you'll never miss another deadline.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CHAIN ─── -->
+<section id="chain">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-label" data-ko>만기 체인</div>
+      <div class="section-label" data-en>Expiry Chains</div>
+      <h2 class="section-title" data-ko>연결된 만기도 함께 챙겨드립니다</h2>
+      <h2 class="section-title" data-en>We Track Linked Expiries Too</h2>
+      <p class="section-desc" data-ko>하나를 놓치면 연쇄 피해가 생깁니다. 아마타는 이 연결 관계까지 알려드립니다.</p>
+      <p class="section-desc" data-en>Miss one deadline and a chain reaction follows. Amatha maps the connections so you're always prepared.</p>
+    </div>
+    <div class="chain-grid">
+
+      <!-- Chain 1: 전세 -->
+      <div class="chain-card fade-in">
+        <h3 data-ko>🏠 전세 계약 만기 체인</h3>
+        <h3 data-en>🏠 Lease Expiry Chain</h3>
+        <div class="chain-flow">
+          <div class="chain-step">
+            <div class="chain-dot primary">1</div>
+            <div class="chain-text"><strong data-ko>전세 계약 만기</strong><strong data-en>Lease Contract Expires</strong></div>
+          </div>
+          <div class="chain-step">
+            <div class="chain-dot secondary">2</div>
+            <div class="chain-text" data-ko>→ <strong>전세대출 연장</strong> 신청 필요 (은행 방문)</div>
+            <div class="chain-text" data-en>→ <strong>Housing loan renewal</strong> required (bank visit)</div>
+          </div>
+          <div class="chain-step">
+            <div class="chain-dot warning">!</div>
+            <div class="chain-text" data-ko>연장 못 하면 <strong>신용불량자 위험</strong></div>
+            <div class="chain-text" data-en>Failure = <strong>credit rating risk</strong></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chain 2: 핸드폰 -->
+      <div class="chain-card fade-in fade-in-delay-1">
+        <h3 data-ko>📱 핸드폰 약정 만기 체인</h3>
+        <h3 data-en>📱 Phone Contract Chain</h3>
+        <div class="chain-flow">
+          <div class="chain-step">
+            <div class="chain-dot primary">1</div>
+            <div class="chain-text"><strong data-ko>핸드폰 약정 만기</strong><strong data-en>Phone Contract Expires</strong></div>
+          </div>
+          <div class="chain-step">
+            <div class="chain-dot secondary">2</div>
+            <div class="chain-text" data-ko>→ <strong>인터넷 결합할인</strong> 종료 위험</div>
+            <div class="chain-text" data-en>→ <strong>Internet bundle discount</strong> may end</div>
+          </div>
+          <div class="chain-step">
+            <div class="chain-dot secondary">3</div>
+            <div class="chain-text" data-ko>→ <strong>TV·인터넷 요금</strong> 자동 인상</div>
+            <div class="chain-text" data-en>→ <strong>TV & internet bill</strong> auto-increases</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chain 3: 공동인증서 -->
+      <div class="chain-card fade-in fade-in-delay-2">
+        <h3 data-ko>🔐 공동인증서 만기 체인</h3>
+        <h3 data-en>🔐 Digital Certificate Chain</h3>
+        <div class="chain-flow">
+          <div class="chain-step">
+            <div class="chain-dot primary">1</div>
+            <div class="chain-text"><strong data-ko>공동인증서 만기</strong><strong data-en>Digital Certificate Expires</strong></div>
+          </div>
+          <div class="chain-step">
+            <div class="chain-dot secondary">2</div>
+            <div class="chain-text" data-ko>→ <strong>세금신고</strong> 로그인 불가</div>
+            <div class="chain-text" data-en>→ <strong>Tax filing</strong> login blocked</div>
+          </div>
+          <div class="chain-step">
+            <div class="chain-dot warning">!</div>
+            <div class="chain-text" data-ko>신고 마감일에 <strong>공동인증서 갱신 마비</strong></div>
+            <div class="chain-text" data-en>Tax deadline hits while <strong>certificate renewal is stuck</strong></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── ITEMS ─── -->
+<section id="items">
+  <div class="container">
+    <div class="section-head" style="text-align:center">
+      <div class="section-label" data-ko>지원 항목</div>
+      <div class="section-label" data-en>Supported Items</div>
+      <h2 class="section-title" data-ko>이런 만기를 챙겨드립니다</h2>
+      <h2 class="section-title" data-en>Everything We Track</h2>
+      <p class="section-desc" style="margin:0 auto" data-ko>개인부터 사업자까지, 중요한 만기는 모두 지원합니다.</p>
+      <p class="section-desc" style="margin:0 auto" data-en>From personal to business — all the expiries that matter.</p>
+    </div>
+    <div class="badges-wrap">
+      <div class="badge-item fade-in">
+        <div class="badge-icon">📱</div>
+        <div class="badge-label" data-ko>핸드폰 약정</div>
+        <div class="badge-label" data-en>Phone Plan</div>
+      </div>
+      <div class="badge-item fade-in fade-in-delay-1">
+        <div class="badge-icon">🌐</div>
+        <div class="badge-label" data-ko>인터넷</div>
+        <div class="badge-label" data-en>Internet</div>
+      </div>
+      <div class="badge-item fade-in fade-in-delay-1">
+        <div class="badge-icon">🏠</div>
+        <div class="badge-label" data-ko>전세·월세</div>
+        <div class="badge-label" data-en>Lease / Rent</div>
+      </div>
+      <div class="badge-item fade-in fade-in-delay-2">
+        <div class="badge-icon">🏦</div>
+        <div class="badge-label" data-ko>대출</div>
+        <div class="badge-label" data-en>Loans</div>
+      </div>
+      <div class="badge-item fade-in fade-in-delay-2">
+        <div class="badge-icon">💰</div>
+        <div class="badge-label" data-ko>적금</div>
+        <div class="badge-label" data-en>Savings</div>
+      </div>
+      <div class="badge-item fade-in fade-in-delay-3">
+        <div class="badge-icon">🚗</div>
+        <div class="badge-label" data-ko>자동차보험</div>
+        <div class="badge-label" data-en>Car Insurance</div>
+      </div>
+      <div class="badge-item fade-in fade-in-delay-3">
+        <div class="badge-icon">📋</div>
+        <div class="badge-label" data-ko>보건증</div>
+        <div class="badge-label" data-en>Health Cert.</div>
+      </div>
+      <div class="badge-item fade-in">
+        <div class="badge-icon">📝</div>
+        <div class="badge-label" data-ko>근로계약</div>
+        <div class="badge-label" data-en>Employment</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PRICING ─── -->
+<section id="pricing">
+  <div class="container">
+    <div class="section-head" style="text-align:center">
+      <div class="section-label" data-ko>요금제</div>
+      <div class="section-label" data-en>Pricing</div>
+      <h2 class="section-title" data-ko>합리적인 가격으로 시작하세요</h2>
+      <h2 class="section-title" data-en>Start at a Price That Makes Sense</h2>
+      <p class="section-desc" style="margin:0 auto" data-ko>만기 하나를 놓치는 손해보다 훨씬 저렴합니다.</p>
+      <p class="section-desc" style="margin:0 auto" data-en>Far cheaper than the cost of missing even one expiry.</p>
+    </div>
+    <div class="pricing-grid">
+
+      <!-- Free -->
+      <div class="price-card fade-in">
+        <div class="price-tier" data-ko>무료</div>
+        <div class="price-tier" data-en>Free</div>
+        <div class="price-name" data-ko>베이직</div>
+        <div class="price-name" data-en>Basic</div>
+        <div class="price-amount">₩0</div>
+        <div class="price-desc" data-ko>최대 5개 항목 / 영구 무료</div>
+        <div class="price-desc" data-en>Up to 5 items / Forever free</div>
+        <ul class="price-features">
+          <li data-ko>만기 항목 5개까지</li>
+          <li data-en>Up to 5 expiry items</li>
+          <li data-ko>기본 앱 알림</li>
+          <li data-en>Basic app notifications</li>
+          <li data-ko>만기 캘린더</li>
+          <li data-en>Expiry calendar</li>
+        </ul>
+        <a href="#beta" class="price-cta outline" data-ko>무료로 시작</a>
+        <a href="#beta" class="price-cta outline" data-en>Get Started Free</a>
+      </div>
+
+      <!-- Pro -->
+      <div class="price-card popular fade-in fade-in-delay-1">
+        <div class="popular-badge" data-ko>가장 인기</div>
+        <div class="popular-badge" data-en>Most Popular</div>
+        <div class="price-tier" data-ko>프로</div>
+        <div class="price-tier" data-en>Pro</div>
+        <div class="price-name" data-ko>프로</div>
+        <div class="price-name" data-en>Pro</div>
+        <div class="price-amount">₩4,900<span data-ko>/월</span><span data-en>/mo</span></div>
+        <div class="price-desc" data-ko>무제한 항목 + OCR + 카카오톡</div>
+        <div class="price-desc" data-en>Unlimited items + OCR + KakaoTalk</div>
+        <ul class="price-features">
+          <li data-ko>만기 항목 무제한</li>
+          <li data-en>Unlimited expiry items</li>
+          <li data-ko>OCR 자동 등록</li>
+          <li data-en>OCR auto-registration</li>
+          <li data-ko>카카오톡 알림 (D-30·7·1)</li>
+          <li data-en>KakaoTalk alerts (D-30·7·1)</li>
+          <li data-ko>만기 체인 알림</li>
+          <li data-en>Expiry chain alerts</li>
+          <li data-ko>개인사업자 전용 항목 지원</li>
+          <li data-en>SME-specific item support</li>
+        </ul>
+        <a href="#beta" class="price-cta" data-ko>베타 신청하기</a>
+        <a href="#beta" class="price-cta" data-en>Join the Beta</a>
+      </div>
+
+      <!-- Senior -->
+      <div class="price-card fade-in fade-in-delay-2">
+        <div class="price-tier" data-ko>시니어</div>
+        <div class="price-tier" data-en>Senior</div>
+        <div class="price-name" data-ko>시니어 케어</div>
+        <div class="price-name" data-en>Senior Care</div>
+        <div class="price-amount">₩9,900<span data-ko>/월</span><span data-en>/mo</span></div>
+        <div class="price-desc" data-ko>우편 알림 + 복지 신청기간 알림</div>
+        <div class="price-desc" data-en>Postal alerts + welfare period reminders</div>
+        <ul class="price-features">
+          <li data-ko>프로 플랜 전체 포함</li>
+          <li data-en>Everything in Pro</li>
+          <li data-ko>우편 알림 서비스</li>
+          <li data-en>Postal notification service</li>
+          <li data-ko>국가 복지 신청기간 알림</li>
+          <li data-en>Government welfare period alerts</li>
+          <li data-ko>보험 갱신 안내</li>
+          <li data-en>Insurance renewal guidance</li>
+          <li data-ko>전담 전화 지원</li>
+          <li data-en>Dedicated phone support</li>
+        </ul>
+        <a href="#beta" class="price-cta outline" data-ko>베타 신청하기</a>
+        <a href="#beta" class="price-cta outline" data-en>Join the Beta</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── BETA FORM ─── -->
+<section id="beta">
+  <div class="container">
+    <div class="section-head" style="text-align:center">
+      <div class="section-label" data-ko>베타 신청</div>
+      <div class="section-label" data-en>Beta Sign-Up</div>
+      <h2 class="section-title" data-ko>베타 테스터로 참여하세요</h2>
+      <h2 class="section-title" data-en>Join as a Beta Tester</h2>
+      <p class="section-desc" style="margin:0 auto" data-ko>베타 참여자에게는 프로 플랜을 3개월 무료로 제공합니다.</p>
+      <p class="section-desc" style="margin:0 auto" data-en>Beta testers get 3 months of Pro for free.</p>
+    </div>
+
+    <div class="form-card fade-in">
+      <!-- Replace YOUR_FORM_ID with your actual Formspree endpoint -->
+      <form id="betaForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+        <div class="form-group">
+          <label for="name" data-ko>이름 *</label>
+          <label for="name" data-en>Name *</label>
+          <input type="text" id="name" name="name" required
+            placeholder-ko="홍길동" placeholder-en="Your Name" />
+        </div>
+        <div class="form-group">
+          <label for="email" data-ko>이메일 *</label>
+          <label for="email" data-en>Email *</label>
+          <input type="email" id="email" name="email" required
+            placeholder-ko="example@email.com" placeholder-en="example@email.com" />
+        </div>
+        <div class="form-group">
+          <label for="kakao" data-ko>카카오톡 ID 또는 핸드폰 번호</label>
+          <label for="kakao" data-en>KakaoTalk ID or Phone Number</label>
+          <input type="text" id="kakao" name="kakao"
+            placeholder-ko="카카오톡 ID 또는 010-0000-0000"
+            placeholder-en="KakaoTalk ID or phone number" />
+        </div>
+        <div class="form-group">
+          <label data-ko>관심 항목 (복수 선택 가능)</label>
+          <label data-en>Areas of Interest (select all that apply)</label>
+          <div class="interest-grid">
+            <label class="interest-label"><input type="checkbox" name="interest" value="phone" /><span data-ko>📱 핸드폰</span><span data-en>📱 Phone</span></label>
+            <label class="interest-label"><input type="checkbox" name="interest" value="lease" /><span data-ko>🏠 전세·월세</span><span data-en>🏠 Lease</span></label>
+            <label class="interest-label"><input type="checkbox" name="interest" value="loan" /><span data-ko>🏦 대출</span><span data-en>🏦 Loan</span></label>
+            <label class="interest-label"><input type="checkbox" name="interest" value="savings" /><span data-ko>💰 적금</span><span data-en>💰 Savings</span></label>
+            <label class="interest-label"><input type="checkbox" name="interest" value="insurance" /><span data-ko>🚗 보험</span><span data-en>🚗 Insurance</span></label>
+            <label class="interest-label"><input type="checkbox" name="interest" value="business" /><span data-ko>📋 사업자 항목</span><span data-en>📋 Business</span></label>
+            <label class="interest-label"><input type="checkbox" name="interest" value="senior" /><span data-ko>👴 시니어 복지</span><span data-en>👴 Senior Care</span></label>
+          </div>
+        </div>
+
+        <input type="hidden" name="_subject" value="아마타 베타 신청" />
+        <button type="submit" class="form-submit">
+          <span data-ko>🔔 베타 신청하기</span>
+          <span data-en>🔔 Apply for Beta</span>
+        </button>
+      </form>
+      <div class="form-success" id="formSuccess">
+        <div style="font-size:2.5rem;margin-bottom:12px">🎉</div>
+        <div data-ko>신청이 완료되었습니다!<br/><span style="font-weight:400;font-size:0.95rem;color:var(--text3)">베타 오픈 시 가장 먼저 알려드릴게요.</span></div>
+        <div data-en>Application received!<br/><span style="font-weight:400;font-size:0.95rem;color:var(--text3)">You'll be the first to know when beta opens.</span></div>
+      </div>
+      <p class="form-note" data-ko>개인정보는 서비스 안내 목적으로만 사용됩니다.</p>
+      <p class="form-note" data-en>Your information will only be used to notify you about the service launch.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <div class="container">
+    <div class="footer-logo">🔔 아마타 (Amatha)</div>
+    <div class="footer-tagline" data-ko>아 맞다, 그거 만기였지!</div>
+    <div class="footer-tagline" data-en>The Moment You Almost Forgot</div>
+    <div class="footer-copy">© 2026 Amatha · <a href="mailto:hello@amatha.app" style="color:var(--teal);text-decoration:none">hello@amatha.app</a> · amatha.app</div>
+  </div>
+</footer>
+
+<script>
+  // ─── Language ───
+  const html = document.documentElement;
+  let lang = localStorage.getItem('amatha_lang') || 'ko';
+  applyLang(lang);
+
+  function applyLang(l) {
+    lang = l;
+    html.setAttribute('data-lang', l);
+    localStorage.setItem('amatha_lang', l);
+
+    // Update form placeholders
+    document.querySelectorAll('[placeholder-ko], [placeholder-en]').forEach(el => {
+      el.placeholder = el.getAttribute('placeholder-' + l) || '';
+    });
+  }
+
+  function toggleLang() {
+    applyLang(lang === 'ko' ? 'en' : 'ko');
+  }
+
+  // ─── Dark Mode ───
+  let dark = localStorage.getItem('amatha_dark') === 'true';
+  applyDark(dark);
+
+  function applyDark(d) {
+    dark = d;
+    document.documentElement.setAttribute('data-theme', d ? 'dark' : 'light');
+    document.getElementById('darkIcon').textContent = d ? '☀️' : '🌙';
+    localStorage.setItem('amatha_dark', d);
+  }
+
+  function toggleDark() {
+    applyDark(!dark);
+  }
+
+  // ─── Interest Checkboxes ───
+  document.querySelectorAll('.interest-label').forEach(label => {
+    label.addEventListener('click', () => {
+      const cb = label.querySelector('input[type="checkbox"]');
+      // Toggle happens naturally; update class after
+      setTimeout(() => {
+        label.classList.toggle('checked', cb.checked);
+      }, 0);
+    });
+  });
+
+  // ─── Form Submit ───
+  const form = document.getElementById('betaForm');
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = form.querySelector('.form-submit');
+    const originalText = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = lang === 'ko' ? '⏳ 전송 중...' : '⏳ Sending...';
+
+    try {
+      const res = await fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { 'Accept': 'application/json' }
+      });
+      if (res.ok) {
+        form.style.display = 'none';
+        document.getElementById('formSuccess').style.display = 'block';
+      } else {
+        throw new Error('Form error');
+      }
+    } catch {
+      btn.disabled = false;
+      btn.innerHTML = originalText;
+      alert(lang === 'ko' ? '오류가 발생했습니다. 잠시 후 다시 시도해주세요.' : 'An error occurred. Please try again.');
+    }
+  });
+
+  // ─── Scroll Animations ───
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
